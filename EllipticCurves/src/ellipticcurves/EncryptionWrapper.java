@@ -13,9 +13,7 @@ import java.security.PublicKey;
  * @author anish
  */
 public class EncryptionWrapper {
-      private byte[] encypted;
-    private PublicKey publicKey;
-    private PrivateKey privateKey;
+    private byte[] encypted;
     EllipticCurveEncryptionEngine engine;
 
     public void EncryptionWrapper() {
@@ -32,10 +30,10 @@ public class EncryptionWrapper {
     }
 
     public PublicKey getPublicKey() {
-        return publicKey;
+        return engine.getPublicKey();
     }
 
     public PrivateKey getPrivateKey() {
-        return privateKey;
+        return engine.getPrivateKey();
     }
 }

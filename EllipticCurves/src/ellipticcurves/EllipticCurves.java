@@ -5,6 +5,7 @@
  */
 package ellipticcurves;
 
+import java.lang.reflect.Array;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
@@ -42,10 +43,10 @@ public class EllipticCurves {
     public static final String CURVE = "prime256v1";
     private static KeyPair akey;
     private static KeyPair bkey;
-    private static final String plainText = "Hello world";
+
     public static void main(String[] args) throws Exception {
         Security.addProvider(new BouncyCastleProvider());
-
+        /*
         KeyPair keyPair = null;
         try {
             akey = generateKeyPair();
@@ -66,20 +67,25 @@ public class EllipticCurves {
         PublicKey pubKey = keyPair.getPublic();
         PrivateKey privateKey = keyPair.getPrivate();
         // Original message
+        */
+        //String plainText = "how do u do jire bbiiiitch hello";
+        String plainText = "HELLO WORLD bhhjjhjkhjhkjknkkhkhjkhjkhjkh";
         System.out.println(plainText);
 
+        EllipticCurveEncryptionEngine et= new EllipticCurveEncryptionEngine();
+        byte[] cipherText=et.encryptToByte(plainText);
+        System.out.println(et.getPrivateKey());
+        System.out.println(et.getPublicKey());
+        String ss = new sun.misc.BASE64Encoder().encode(cipherText);
+        System.out.println(ss);
         // encrypt the message
-        EncryptionWrapper enc = new EncryptionWrapper();
-        byte[] cipher = enc.getEncrypted(plainText);
         //byte[] cipherText = encrypt(pubKey,privateKey, plainText);
-        //System.out.println(Base64.encode(cipher));
+        //System.out.println(Base64.encode(cipherText));
 
         // decrypt the message
-        DecryptionWrapper d = new DecryptionWrapper();
-        byte[] decrypted = d.getDecrypted(cipher, enc.getPrivateKey(), enc.getPublicKey());
-        //byte[] decryptedText = decrypt(privateKey, pubKey, cipherText);
-        System.out.println(new String(decrypted));
-        //System.out.println(privateKey);
+        byte[] decryptedText = decrypt( et.getPrivateKey(), et.getPublicKey(), cipherText);
+        System.out.println(new String(decryptedText));
+        
     }
     
     public static KeyPair generateKeyPair() throws NoSuchAlgorithmException, NoSuchProviderException, InvalidAlgorithmParameterException {

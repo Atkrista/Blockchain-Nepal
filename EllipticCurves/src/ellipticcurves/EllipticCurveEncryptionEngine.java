@@ -5,8 +5,6 @@
  */
 package ellipticcurves;
 
-import static ellipticcurves.EllipticCurves.ALGORITHM;
-import static ellipticcurves.EllipticCurves.PROVIDER;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
@@ -14,12 +12,20 @@ import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.security.PrivateKey;
 import java.security.PublicKey;
+import java.security.SecureRandom;
 import java.security.Security;
+import java.security.interfaces.ECPrivateKey;
+import java.security.interfaces.ECPublicKey;
 import java.security.spec.ECGenParameterSpec;
+import java.util.Arrays;
 import javax.crypto.Cipher;
+import javax.crypto.spec.IvParameterSpec;
 import org.bouncycastle.jce.interfaces.IESKey;
-import org.bouncycastle.jce.spec.IEKeySpec;
 import org.bouncycastle.jce.spec.IESParameterSpec;
+import org.bouncycastle.util.encoders.Base64;
+import org.bouncycastle.jce.spec.IEKeySpec;
+import org.bouncycastle.jce.provider.BouncyCastleProvider;
+
 /**
  *
  * @author anish
@@ -36,7 +42,7 @@ public class EllipticCurveEncryptionEngine {
         //manually made bcprov-jdk15-130.jar a library
         //did not find gradle dependency
         //has a different tested version named SpongyCastle
-        Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
+        Security.addProvider(new BouncyCastleProvider());
     }
 
     private void init_encryptor() {
@@ -55,13 +61,12 @@ public class EllipticCurveEncryptionEngine {
         } catch (InvalidAlgorithmParameterException e) {
             e.printStackTrace();
         }
-        System.out.println(publicKey);
-        System.out.println(privateKey);
+        
     }
 
 
     private KeyPair generateKey() throws NoSuchAlgorithmException, NoSuchProviderException, InvalidAlgorithmParameterException {
-        KeyPairGenerator keyGenerator = KeyPairGenerator.getInstance(" EC", PROVIDER);
+        KeyPairGenerator keyGenerator = KeyPairGenerator.getInstance("EC", PROVIDER);
         keyGenerator.initialize(new ECGenParameterSpec(CURVE));
         KeyPair keypair = keyGenerator.genKeyPair();
         return keypair;
@@ -72,7 +77,6 @@ public class EllipticCurveEncryptionEngine {
         init_encryptor();
         byte[]  d = new byte[] { 1, 2, 3, 4, 5, 6, 7, 8 };
         byte[]  e = new byte[] { 8, 7, 6, 5, 4, 3, 2, 1 };
-        System.out.println(publicKey);
         IESParameterSpec param = new IESParameterSpec(d, e, 256);
         Cipher cipher = Cipher.getInstance(ALGORITHM, PROVIDER);
         IESKey iesKey = (IESKey) new IEKeySpec(privateKey,publicKey);

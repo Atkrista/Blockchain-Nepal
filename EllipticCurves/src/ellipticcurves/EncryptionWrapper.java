@@ -13,27 +13,27 @@ import java.security.PublicKey;
  * @author anish
  */
 public class EncryptionWrapper {
-    private byte[] encypted;
+    private byte[] encrypted;
     EllipticCurveEncryptionEngine engine;
 
-    public void EncryptionWrapper() {
+    public EncryptionWrapper(String message) {
         engine = new EllipticCurveEncryptionEngine();
-    }
-
-    public byte[] getEncrypted (String message) {
         try {
-            encypted = engine.encryptToByte(message);
+            encrypted = engine.encryptToByte(message);
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return encypted;
+    }
+
+    public byte[] getEncrypted () {
+        return this.encrypted;
     }
 
     public PublicKey getPublicKey() {
-        return engine.getPublicKey();
+        return this.engine.getPublicKey();
     }
 
     public PrivateKey getPrivateKey() {
-        return engine.getPrivateKey();
+        return this.engine.getPrivateKey();
     }
 }

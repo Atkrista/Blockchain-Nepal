@@ -69,23 +69,38 @@ public class EllipticCurves {
         // Original message
         */
         //String plainText = "how do u do jire bbiiiitch hello";
-        String plainText = "HELLO WORLD bhhjjhjkhjhkjknkkhkhjkhjkhjkh";
+        String plainText = "HELLO WORLD";
         System.out.println(plainText);
+//        
 
-        EllipticCurveEncryptionEngine et= new EllipticCurveEncryptionEngine();
-        byte[] cipherText=et.encryptToByte(plainText);
-        System.out.println(et.getPrivateKey());
-        System.out.println(et.getPublicKey());
+        
+        Engine engine = new Engine();
+        engine.gimmeKeyPair();
+        byte[] cipherText = engine.encrypt(plainText);
         String ss = new sun.misc.BASE64Encoder().encode(cipherText);
         System.out.println(ss);
-        // encrypt the message
+        System.out.println(new String(engine.decrypt(cipherText)));        
+//        EncryptionWrapper encryptionWrapper = new EncryptionWrapper(plainText);
+//        byte[] cipherText = encryptionWrapper.getEncrypted();
+//        System.out.println(encryptionWrapper.getPrivateKey());
+//        System.out.println(encryptionWrapper.getPublicKey());
+//        String ss = new sun.misc.BASE64Encoder().encode(cipherText);
+//        System.out.println(ss);
+//        EllipticCurveEncryptionEngine et= new EllipticCurveEncryptionEngine();
+//        byte[] cipherText=et.encryptToByte(plainText);
+//        System.out.println(et.getPrivateKey());
+//        System.out.println(et.getPublicKey());
+//        String ss = new sun.misc.BASE64Encoder().encode(cipherText);
+//        System.out.println(ss);
+//        // encrypt the message
         //byte[] cipherText = encrypt(pubKey,privateKey, plainText);
         //System.out.println(Base64.encode(cipherText));
 
         // decrypt the message
-        byte[] decryptedText = decrypt( et.getPrivateKey(), et.getPublicKey(), cipherText);
-        System.out.println(new String(decryptedText));
-        
+//        DecryptionWrapper decryptionWrapper = new DecryptionWrapper();
+//        byte[] decryptedText = decryptionWrapper.getDecrypted(cipherText, encryptionWrapper.getPrivateKey(), encryptionWrapper.getPublicKey());
+//        System.out.println(new String(decryptedText));
+//        
     }
     
     public static KeyPair generateKeyPair() throws NoSuchAlgorithmException, NoSuchProviderException, InvalidAlgorithmParameterException {
@@ -113,6 +128,6 @@ public class EllipticCurves {
         cipher.init(Cipher.DECRYPT_MODE, iesKey, param);
         return cipher.doFinal(encrypted);
     }
-    
+ 
     
 }

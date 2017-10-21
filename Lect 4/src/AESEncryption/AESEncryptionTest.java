@@ -24,7 +24,7 @@ import java.util.logging.Logger;
 
 public class AESEncryptionTest {
     
-    
+    //Simple test for AES encryption
     public static void SimpleAESTest(){
         AESEncryption aesengine = new AESEncryption();
         //String thePlainText = "A quick brown fox jumps over the lazy dog";
@@ -71,10 +71,12 @@ public class AESEncryptionTest {
         return names;
     }
    
+    //Test for file operations
     public static void filesAESTest(String password, String path){
         final File folder = new File(path);
         List<String> names = listFilesForFolder(folder);
         for (int i = 0; i < names.size(); i++) {
+            System.out.println("Currently in ");
             System.out.println(names.get(i));
             try {
                 encryptForFile(password, path + names.get(i), path + "Encrypted/enc" +names.get(i));
@@ -84,7 +86,7 @@ public class AESEncryptionTest {
         }
         for (int i = 0; i < names.size(); i++) {
             try {
-                decryptForFile(password, path + "Encrypted/" + "enc" + names.get(i), path + "Decrypted/enc" +names.get(i));
+                decryptForFile(password, path + "Encrypted/" + "enc" + names.get(i), path + "Decrypted/dec" +names.get(i));
             } catch (IOException ex) {
                 Logger.getLogger(AESEncryptionTest.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -93,6 +95,8 @@ public class AESEncryptionTest {
         
     }
     
+    
+    //encryption fucntion for one file
     public static void encryptForFile(String password, String readName, String writeName) throws IOException {   
         System.out.println(String.format ("Starting Encryption for %s", readName));
         
@@ -125,30 +129,18 @@ public class AESEncryptionTest {
             }
             byteBuffer.clear(); 
         }
+        
+        //closing
         bw.close();
-//        BufferedReader br = new BufferedReader(new FileReader(readName));
-//        BufferedWriter bw = new BufferedWriter(new FileWriter(writeName));     
-//        StringBuffer sb = new StringBuffer();
-//        AESEncryption aesengine = new AESEncryption();
-//        while (true) {
-//            String line = br.readLine();
-//            line.replace("\n", "");
-//            String chunk = toString((br.read(myBuffer,0,512))); 
-//            //System.out.println(line);
-//            try {
-//                String cipher = aesengine.encrypt(password, line);
-//                bw.write(cipher);
-//            } catch (GeneralSecurityException ex) {
-//                Logger.getLogger(AESEncryptionTest.class.getName()).log(Level.SEVERE, null, ex);
-//            }
-//            if (line == null) break;
-//        }
-//        br.close();
-//        bw.close();
+        inChannel.close();
+        aFile.close();
+        
     }    
     
+    
+    //decryption fucntion for one file
     public static void decryptForFile(String password, String readName, String writeName) throws IOException {   
-        System.out.println(String.format ("Starting Encryption for %s", readName));
+        System.out.println(String.format ("Starting Decryption for %s", readName));
         
         RandomAccessFile aFile = new RandomAccessFile(readName, "r");
         FileChannel inChannel = aFile.getChannel();
@@ -179,29 +171,16 @@ public class AESEncryptionTest {
             }
             byteBuffer.clear(); 
         }
+        
+        //closing
         bw.close();
-//        BufferedReader br = new BufferedReader(new FileReader(readName));
-//        BufferedWriter bw = new BufferedWriter(new FileWriter(writeName));     
-//        StringBuffer sb = new StringBuffer();
-//        AESEncryption aesengine = new AESEncryption();
-//        while (true) {
-//            String line = br.readLine();
-//            line.replace("\n", "");
-//            String chunk = toString((br.read(myBuffer,0,512))); 
-//            //System.out.println(line);
-//            try {
-//                String cipher = aesengine.encrypt(password, line);
-//                bw.write(cipher);
-//            } catch (GeneralSecurityException ex) {
-//                Logger.getLogger(AESEncryptionTest.class.getName()).log(Level.SEVERE, null, ex);
-//            }
-//            if (line == null) break;
-//        }
-//        br.close();
-//        bw.close();
+        inChannel.close();
+        aFile.close();
+        
     }    
 
-    
+    //Get String from Arraylist of chars
+    //used when using arraylist<Character> to append byteBuffer while reading file
     public static String getStringRepresentation(ArrayList<Character> list)
     {    
         StringBuilder builder = new StringBuilder(list.size());
@@ -212,8 +191,20 @@ public class AESEncryptionTest {
         return builder.toString();
     }
     public static void main(String[] args) {
-        //SimpleAESTest();
-        filesAESTest("hello", "F:/Encryptions/Tests/");
+        
+        Scanner scanner = new Scanner( System.in );
+        System.out.println("1. Simple test \n");
+        System.out.println("2. File encryptions in a folder \n");
+        System.out.println("(Currently using F:/Encryptions/Tests/)");
+        System.out.println("(Currently using F:/Encryptions/Tests/Encrypted/)");
+        System.out.println("(Currently using F:/Encryptions/Tests/Decrypted/)");        
+        int what = scanner.nextInt();
+        if (what == 1){
+            SimpleAESTest();
+        }
+        else{
+            filesAESTest("hello", "F:/Encryptions/Tests/");
+        }
     }
 }
     
